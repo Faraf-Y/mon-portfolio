@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio de FaraFY — Développeur en formation, passionné par l'IA et les projets concrets.">
+  <meta property="og:title" content="FaraFY — Portfolio">
+  <meta property="og:description" content="Développeur en formation qui construit des projets concrets avec l'IA.">
+  <meta property="og:type" content="website">
+  <script>(function(){var t=localStorage.getItem('theme')||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');document.documentElement.setAttribute('data-theme',t);})();</script>
+  <title>FaraFY — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Critical CSS : variables + reset + body + nav + hero (above the fold) -->
+  <style>
+    :root{--bg:#0a0a0a;--bg-alt:#1a1a1a;--text:#e0e0e0;--accent:#64ffda;--nav-bg:rgba(10,10,10,.85);--nav-height:60px;--blur-nav:12px;--border:#222;--border-soft:#333;--font:'Inter',system-ui,sans-serif;--spacing:clamp(2rem,8vw,6rem);--max-width:700px;--radius:4px;--t-fast:.2s;--t-base:.3s}
+    [data-theme="light"]{--bg:#fff;--text:#1a1a1a;--accent:#0d9373;--nav-bg:rgba(255,255,255,.85);--border:#e0e0e0;--border-soft:#ddd}
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{background-color:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+    .site-nav{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--nav-bg);border-bottom:1px solid var(--border);height:var(--nav-height)}
+    #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  </style>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="site-nav">
+    <div class="site-nav__bar">
+      <a class="site-nav__logo" href="#">FaraFY</a>
+      <div class="site-nav__controls">
+        <button class="theme-toggle" aria-label="Passer en mode clair" title="Changer le thème">
+          <svg class="theme-toggle__sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="theme-toggle__moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="site-nav__burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+    <nav id="main-nav" class="site-nav__links" aria-label="Navigation principale">
+      <a href="#about">À propos</a>
+      <a href="#projects">Projets</a>
+      <a href="#contact">Contact</a>
+      <a href="blog/index.html">Blog</a>
+    </nav>
+  </header>
+
+  <main>
+
+  <!-- Hero -->
+  <section id="hero">
+    <h1>FaraFY</h1>
+    <p class="hero-subtitle">Développeur en formation</p>
+    <p class="hero-tagline">Je construis des projets concrets avec l'IA.</p>
+    <a href="#projects" class="btn">Voir mes projets</a>
+  </section>
+
+  <!-- À propos -->
+  <section id="about" class="about">
+    <h2 class="about__title">À propos</h2>
+    <div class="about__grid">
+      <div class="about__photo">Photo</div>
+      <p class="about__text">Passionné par la technologie et l'intelligence artificielle, j'apprends à construire des projets concrets en utilisant les outils les plus avancés du marché. Ce portfolio est lui-même construit avec Claude Code.</p>
+    </div>
+  </section>
+
+  <!-- Projets -->
+  <section id="projects">
+    <h2>Mes Projets</h2>
+    <ul class="project-grid">
+
+      <li class="project-card">
+        <div class="project-card__banner"></div>
+        <div class="project-card__body">
+          <h3 class="project-card__title">MonPortfolio</h3>
+          <p class="project-card__desc">Mon portfolio développeur, construit entièrement avec Claude Code.</p>
+          <ul class="project-card__tags">
+            <li class="tag">HTML</li>
+            <li class="tag">CSS</li>
+            <li class="tag">JavaScript</li>
+            <li class="tag">Claude Code</li>
+          </ul>
+          <a href="#" class="project-card__link">Voir le projet</a>
+        </div>
+      </li>
+
+      <li class="project-card">
+        <div class="project-card__banner"></div>
+        <div class="project-card__body">
+          <h3 class="project-card__title">Calculatrice CLI</h3>
+          <p class="project-card__desc">Une calculatrice en ligne de commande en Python.</p>
+          <ul class="project-card__tags">
+            <li class="tag">Python</li>
+            <li class="tag">CLI</li>
+          </ul>
+          <a href="#" class="project-card__link">Voir le projet</a>
+        </div>
+      </li>
+
+      <li class="project-card">
+        <div class="project-card__banner"></div>
+        <div class="project-card__body">
+          <h3 class="project-card__title">API Notes</h3>
+          <p class="project-card__desc">Une API REST pour gérer des notes personnelles.</p>
+          <ul class="project-card__tags">
+            <li class="tag">Node.js</li>
+            <li class="tag">Express</li>
+            <li class="tag">REST API</li>
+          </ul>
+          <a href="#" class="project-card__link">Voir le projet</a>
+        </div>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Me contacter</h2>
+    <form class="contact-form" action="#" novalidate>
+      <div class="contact-form__group">
+        <label class="contact-form__label" for="name">Nom</label>
+        <input class="contact-form__input" type="text" id="name" name="name" placeholder="Votre nom" autocomplete="name">
+      </div>
+      <div class="contact-form__group">
+        <label class="contact-form__label" for="email">Email</label>
+        <input class="contact-form__input" type="email" id="email" name="email" placeholder="votre@email.com" autocomplete="email">
+      </div>
+      <div class="contact-form__group">
+        <label class="contact-form__label" for="message">Message</label>
+        <textarea class="contact-form__textarea" id="message" name="message" rows="5" placeholder="Votre message..."></textarea>
+      </div>
+      <button class="btn btn--accent" type="submit">Envoyer</button>
+    </form>
+  </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <nav class="footer__links">
+      <a href="https://github.com/FarafY" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href="#">LinkedIn</a>
+    </nav>
+    <p class="footer__copy">© 2026 FaraFY · Construit avec Claude Code</p>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
