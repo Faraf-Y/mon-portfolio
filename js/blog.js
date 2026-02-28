@@ -1,5 +1,13 @@
 // Blog listing — fetches posts.json and renders the article list
 
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
 fetch('../posts/posts.json')
   .then(r => r.json())
   .then(posts => {
@@ -13,10 +21,10 @@ fetch('../posts/posts.json')
     list.innerHTML = posts
       .map(post => `
         <li class="post-card">
-          <a href="${post.slug}.html" class="post-card__link">
-            <time class="post-card__date" datetime="${post.date}">${formatDate(post.date)}</time>
-            <h3 class="post-card__title">${post.title}</h3>
-            <p class="post-card__excerpt">${post.excerpt}</p>
+          <a href="${encodeURIComponent(post.slug)}.html" class="post-card__link">
+            <time class="post-card__date" datetime="${escapeHtml(post.date)}">${formatDate(post.date)}</time>
+            <h3 class="post-card__title">${escapeHtml(post.title)}</h3>
+            <p class="post-card__excerpt">${escapeHtml(post.excerpt)}</p>
           </a>
         </li>`)
       .join('');
