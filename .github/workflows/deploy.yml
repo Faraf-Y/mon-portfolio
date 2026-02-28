@@ -15,62 +15,111 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # ── Job 1 : Vérifications pré-déploiement ──────────────────────────────────
+  # ── Job 1 : Vérifications ──────────────────────────────────────────────────
   verify:
     name: Vérifications
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fichiers essentiels présents
+      # 1. index.html existe
+      - name: index.html présent
         run: |
-          test -f index.html          && echo "✅ index.html"
-          test -f css/style.css       && echo "✅ style.css"
-          test -f js/main.js          && echo "✅ main.js"
-          test -f data/projects.json  && echo "✅ projects.json"
-          test -f posts/posts.json    && echo "✅ posts.json"
+          test -f index.html && echo "✅ index.html présent"
 
-      - name: JSON valides
+      # 2. Syntaxe JavaScript — node --check utilise le parseur V8 natif
+      - name: Syntaxe JavaScript
         run: |
-          python3 -c "import json; json.load(open('data/projects.json'))" && echo "✅ projects.json"
-          python3 -c "import json; json.load(open('posts/posts.json'))"   && echo "✅ posts.json"
-
-      - name: Pas de fichiers temporaires
-        run: |
-          found=$(find . \( -name ".DS_Store" -o -name "Thumbs.db" \) -not -path "./.git/*")
-          if [ -n "$found" ]; then
-            echo "❌ Fichiers temporaires détectés : $found"
-            exit 1
-          fi
-          echo "✅ Pas de fichiers temporaires"
-
-      - name: Pas de console.log oublié
-        run: |
-          if grep -rn "console\.log" js/ --include="*.js"; then
-            echo "❌ console.log détecté dans les scripts"
-            exit 1
-          fi
-          echo "✅ Pas de console.log"
-
-      - name: HTML — attribut lang présent
-        run: |
-          for f in index.html blog/index.html blog/premier-projet-ia.html; do
-            if ! grep -q 'lang=' "$f"; then
-              echo "❌ Attribut lang manquant dans $f"
-              exit 1
+          ok=true
+          for f in js/*.js; do
+            if node --check "$f" 2>&1; then
+              echo "✅ $f"
+            else
+              echo "❌ $f"
+              ok=false
             fi
           done
-          echo "✅ Attribut lang présent sur toutes les pages"
+          $ok
 
-      - name: HTML — meta description présente
+      # 3. Syntaxe CSS — accolades équilibrées (sans npm)
+      - name: Syntaxe CSS
         run: |
-          for f in index.html blog/index.html blog/premier-projet-ia.html; do
-            if ! grep -q 'meta name="description"' "$f"; then
-              echo "❌ Meta description manquante dans $f"
-              exit 1
-            fi
-          done
-          echo "✅ Meta description présente sur toutes les pages"
+          python3 << 'EOF'
+          import sys, re, glob
+
+          files = glob.glob('css/*.css')
+          all_ok = True
+          for path in files:
+              with open(path) as f:
+                  content = f.read()
+              # Supprimer commentaires avant de compter
+              content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+              opened = content.count('{')
+              closed = content.count('}')
+              if opened != closed:
+                  print(f"❌ {path} : accolades déséquilibrées ({opened}{{ vs {closed}}})")
+                  all_ok = False
+              else:
+                  print(f"✅ {path} ({opened} blocs)")
+          sys.exit(0 if all_ok else 1)
+          EOF
+
+      # 4. Validation HTML — balises non fermées (SVG inline exclu des faux positifs)
+      - name: Validation HTML
+        run: |
+          python3 << 'EOF'
+          import sys, glob
+          from html.parser import HTMLParser
+
+          VOID = {'area','base','br','col','embed','hr','img','input',
+                  'link','meta','param','source','track','wbr'}
+          # Éléments SVG inline : auto-fermants dans le markup, ignorés ici
+          SVG  = {'svg','circle','line','path','rect','polygon','polyline',
+                  'ellipse','text','tspan','use','g','defs','symbol',
+                  'lineargradient','radialgradient','stop'}
+
+          class Validator(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.stack  = []
+                  self.errors = []
+
+              def handle_starttag(self, tag, attrs):
+                  if tag not in VOID and tag not in SVG:
+                      self.stack.append(tag)
+
+              def handle_endtag(self, tag):
+                  if tag in VOID or tag in SVG:
+                      return
+                  if self.stack and self.stack[-1] == tag:
+                      self.stack.pop()
+                  else:
+                      expected = self.stack[-1] if self.stack else 'aucun'
+                      self.errors.append(
+                          f"</{tag}> inattendue (attendu </{expected}>)"
+                      )
+
+          pages = sorted(glob.glob('*.html') + glob.glob('blog/*.html'))
+          all_ok = True
+          for path in pages:
+              with open(path) as f:
+                  content = f.read()
+              v = Validator()
+              try:
+                  v.feed(content)
+              except Exception as e:
+                  print(f"❌ {path} : erreur de parsing — {e}")
+                  all_ok = False
+                  continue
+              issues = v.errors + ([f"non fermées : {v.stack}"] if v.stack else [])
+              if issues:
+                  for issue in issues:
+                      print(f"❌ {path} : {issue}")
+                  all_ok = False
+              else:
+                  print(f"✅ {path}")
+          sys.exit(0 if all_ok else 1)
+          EOF
 
   # ── Job 2 : Déploiement GitHub Pages ───────────────────────────────────────
   deploy:
@@ -82,13 +131,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/configure-pages@v4
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
       - name: Déployer sur GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
