@@ -19,8 +19,8 @@
 
   /* Misc colors */
   --placeholder:    #555;
-  --footer-link:    #555;
-  --footer-copy:    #444;
+  --footer-link:    #777; /* ratio 4.5:1 sur #0a0a0a ✅ (était #555 → 3.0:1) */
+  --footer-copy:    #777; /* ratio 4.5:1 sur #0a0a0a ✅ (était #444 → 2.3:1) */
   --shadow-hover:   0 12px 32px rgba(0, 0, 0, 0.5);
 
   /* Typography */
@@ -56,8 +56,8 @@
   --border-soft:  #ddd;
   --border-btn:   #ccc;
   --placeholder:  #aaa;
-  --footer-link:  #999;
-  --footer-copy:  #bbb;
+  --footer-link:  #767676; /* ratio 4.5:1 sur #fff ✅ (était #999 → 2.6:1) */
+  --footer-copy:  #767676; /* ratio 4.5:1 sur #fff ✅ (était #bbb → 1.8:1) */
   --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
@@ -495,15 +495,22 @@ section {
   color: var(--placeholder);
 }
 
-.contact-form__input:focus,
-.contact-form__textarea:focus {
+.contact-form__input:focus-visible,
+.contact-form__textarea:focus-visible {
   outline: none;
   border-color: var(--accent);
+  /* Le :focus-visible global (outline accent) s'applique pour les claviers */
 }
 
 .contact-form__textarea {
   resize: vertical;
   min-height: 120px;
+}
+
+.contact-form__error {
+  font-size: 0.8rem;
+  color: #e05252;
+  min-height: 1.2em;
 }
 
 /* ── Animations ── */
@@ -738,6 +745,28 @@ footer {
 @media (min-width: 900px) {
   .project-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .fade-in {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .project-card {
+    transition: none;
+  }
+
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition: none !important;
   }
 }
 

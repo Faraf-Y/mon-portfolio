@@ -60,3 +60,51 @@ themeToggle.addEventListener('click', () => {
   applyTheme(next);
 });
 
+// ── Escape : fermer le menu mobile ──
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+    nav.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    burger.focus();
+  }
+});
+
+// ── Validation formulaire de contact ──
+const form = document.querySelector('.contact-form');
+if (form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    const fields = [
+      { id: 'name',    label: 'Le nom' },
+      { id: 'email',   label: "L'email" },
+      { id: 'message', label: 'Le message' },
+    ];
+
+    fields.forEach(({ id, label }) => {
+      const input = document.getElementById(id);
+      const error = document.getElementById(`${id}-error`);
+      const value = input.value.trim();
+
+      if (!value) {
+        error.textContent = `${label} est obligatoire.`;
+        input.setAttribute('aria-invalid', 'true');
+        valid = false;
+      } else if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        error.textContent = 'Adresse email invalide.';
+        input.setAttribute('aria-invalid', 'true');
+        valid = false;
+      } else {
+        error.textContent = '';
+        input.removeAttribute('aria-invalid');
+      }
+    });
+
+    if (valid) {
+      form.innerHTML = '<p style="color:var(--accent);padding:1rem 0">Message envoyé ! Je vous répondrai prochainement.</p>';
+    }
+  });
+}
+

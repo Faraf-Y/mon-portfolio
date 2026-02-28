@@ -55,18 +55,21 @@
   <!-- Contact -->
   <section id="contact">
     <h2>Me contacter</h2>
-    <form class="contact-form" action="#" novalidate>
+    <form class="contact-form" action="#">
       <div class="contact-form__group">
         <label class="contact-form__label" for="name">Nom</label>
-        <input class="contact-form__input" type="text" id="name" name="name" placeholder="Votre nom" autocomplete="name">
+        <input class="contact-form__input" type="text" id="name" name="name" placeholder="Votre nom" autocomplete="name" required aria-required="true" aria-describedby="name-error">
+        <p class="contact-form__error" id="name-error" role="alert"></p>
       </div>
       <div class="contact-form__group">
         <label class="contact-form__label" for="email">Email</label>
-        <input class="contact-form__input" type="email" id="email" name="email" placeholder="votre@email.com" autocomplete="email">
+        <input class="contact-form__input" type="email" id="email" name="email" placeholder="votre@email.com" autocomplete="email" required aria-required="true" aria-describedby="email-error">
+        <p class="contact-form__error" id="email-error" role="alert"></p>
       </div>
       <div class="contact-form__group">
         <label class="contact-form__label" for="message">Message</label>
-        <textarea class="contact-form__textarea" id="message" name="message" rows="5" placeholder="Votre message..."></textarea>
+        <textarea class="contact-form__textarea" id="message" name="message" rows="5" placeholder="Votre message..." required aria-required="true" aria-describedby="message-error"></textarea>
+        <p class="contact-form__error" id="message-error" role="alert"></p>
       </div>
       <button class="btn btn--accent" type="submit">Envoyer</button>
     </form>
