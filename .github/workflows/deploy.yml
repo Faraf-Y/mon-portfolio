@@ -1,0 +1,94 @@
+name: Vérification et déploiement
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # ── Job 1 : Vérifications pré-déploiement ──────────────────────────────────
+  verify:
+    name: Vérifications
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fichiers essentiels présents
+        run: |
+          test -f index.html          && echo "✅ index.html"
+          test -f css/style.css       && echo "✅ style.css"
+          test -f js/main.js          && echo "✅ main.js"
+          test -f data/projects.json  && echo "✅ projects.json"
+          test -f posts/posts.json    && echo "✅ posts.json"
+
+      - name: JSON valides
+        run: |
+          python3 -c "import json; json.load(open('data/projects.json'))" && echo "✅ projects.json"
+          python3 -c "import json; json.load(open('posts/posts.json'))"   && echo "✅ posts.json"
+
+      - name: Pas de fichiers temporaires
+        run: |
+          found=$(find . -name ".DS_Store" -o -name "Thumbs.db" | grep -v ".git")
+          if [ -n "$found" ]; then
+            echo "❌ Fichiers temporaires détectés : $found"
+            exit 1
+          fi
+          echo "✅ Pas de fichiers temporaires"
+
+      - name: Pas de console.log oublié
+        run: |
+          if grep -rn "console\.log" js/ --include="*.js"; then
+            echo "❌ console.log détecté dans les scripts"
+            exit 1
+          fi
+          echo "✅ Pas de console.log"
+
+      - name: HTML — attribut lang présent
+        run: |
+          for f in index.html blog/index.html blog/premier-projet-ia.html; do
+            if ! grep -q 'lang=' "$f"; then
+              echo "❌ Attribut lang manquant dans $f"
+              exit 1
+            fi
+          done
+          echo "✅ Attribut lang présent sur toutes les pages"
+
+      - name: HTML — meta description présente
+        run: |
+          for f in index.html blog/index.html blog/premier-projet-ia.html; do
+            if ! grep -q 'meta name="description"' "$f"; then
+              echo "❌ Meta description manquante dans $f"
+              exit 1
+            fi
+          done
+          echo "✅ Meta description présente sur toutes les pages"
+
+  # ── Job 2 : Déploiement GitHub Pages ───────────────────────────────────────
+  deploy:
+    name: Déploiement
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Déployer sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
