@@ -1,0 +1,14 @@
+[
+  {
+    "name": "mon-portfolio",
+    "description": "Portfolio développeur — HTML/CSS/JS, dark mode, blog Markdown. Construit avec Claude Code.",
+    "languages": ["HTML", "CSS", "JavaScript"],
+    "url": "https://github.com/Faraf-Y/mon-portfolio"
+  },
+  {
+    "name": "financial-services-plugins",
+    "description": "Mes outils d'analyse financière sécurisés.",
+    "languages": ["Python"],
+    "url": "https://github.com/Faraf-Y/financial-services-plugins"
+  }
+]

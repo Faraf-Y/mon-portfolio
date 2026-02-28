@@ -59,3 +59,29 @@ themeToggle.addEventListener('click', () => {
   localStorage.setItem('theme', next);
   applyTheme(next);
 });
+
+// ── Projects ──
+fetch('data/projects.json')
+  .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+  .then(projects => {
+    const grid = document.getElementById('project-grid');
+    if (!grid) return;
+    grid.innerHTML = projects.map(p => `
+      <li class="project-card">
+        <div class="project-card__banner"></div>
+        <div class="project-card__body">
+          <h3 class="project-card__title">
+            <a href="${p.url}" target="_blank" rel="noopener noreferrer">${p.name}</a>
+          </h3>
+          <p class="project-card__desc">${p.description}</p>
+          <ul class="project-card__tags">
+            ${p.languages.map(lang => `<li class="tag">${lang}</li>`).join('')}
+          </ul>
+          <a href="${p.url}" class="project-card__link" target="_blank" rel="noopener noreferrer">Voir sur GitHub</a>
+        </div>
+      </li>`).join('');
+  })
+  .catch(() => {
+    const grid = document.getElementById('project-grid');
+    if (grid) grid.innerHTML = '<li style="color:var(--muted)">Impossible de charger les projets.</li>';
+  });
