@@ -11,3 +11,6 @@ node_modules/
 # Local config (private, not versioned)
 CLAUDE.local.md
 *.local.json
+
+# Rapports générés localement
+reports/
