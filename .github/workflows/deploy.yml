@@ -37,7 +37,7 @@ jobs:
 
       - name: Pas de fichiers temporaires
         run: |
-          found=$(find . -name ".DS_Store" -o -name "Thumbs.db" | grep -v ".git")
+          found=$(find . \( -name ".DS_Store" -o -name "Thumbs.db" \) -not -path "./.git/*")
           if [ -n "$found" ]; then
             echo "❌ Fichiers temporaires détectés : $found"
             exit 1
