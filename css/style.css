@@ -50,7 +50,7 @@
   --bg-alt:       #f5f5f5;
   --text:         #1a1a1a;
   --muted:        #555;
-  --accent:       #0d9373;
+  --accent:       #0a7a5f;
   --nav-bg:       rgba(255, 255, 255, 0.85);
   --border:       #e0e0e0;
   --border-soft:  #ddd;
@@ -84,6 +84,25 @@ a {
 
 ul {
   list-style: none;
+}
+
+/* ── Skip link ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  z-index: 200;
+  font-size: 0.85rem;
+  transition: none;
+}
+
+.skip-link:focus {
+  top: 1rem;
 }
 
 /* ── Focus visible (keyboard navigation) ── */

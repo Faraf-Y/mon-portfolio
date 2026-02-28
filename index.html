@@ -15,7 +15,7 @@
   <!-- Critical CSS : variables + reset + body + nav + hero (above the fold) -->
   <style>
     :root{--bg:#0a0a0a;--bg-alt:#1a1a1a;--text:#e0e0e0;--accent:#64ffda;--nav-bg:rgba(10,10,10,.85);--nav-height:60px;--blur-nav:12px;--border:#222;--border-soft:#333;--font:'Inter',system-ui,sans-serif;--spacing:clamp(2rem,8vw,6rem);--max-width:700px;--radius:4px;--t-fast:.2s;--t-base:.3s}
-    [data-theme="light"]{--bg:#fff;--text:#1a1a1a;--accent:#0d9373;--nav-bg:rgba(255,255,255,.85);--border:#e0e0e0;--border-soft:#ddd}
+    [data-theme="light"]{--bg:#fff;--text:#1a1a1a;--accent:#0a7a5f;--nav-bg:rgba(255,255,255,.85);--border:#e0e0e0;--border-soft:#ddd}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     body{background-color:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
     .site-nav{position:fixed;top:0;left:0;right:0;z-index:100;background-color:var(--nav-bg);border-bottom:1px solid var(--border);height:var(--nav-height)}
@@ -24,6 +24,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
+  <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
   <!-- Navigation -->
   <header class="site-nav">
@@ -49,7 +51,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
 
   <!-- Hero -->
   <section id="hero">
@@ -71,7 +73,7 @@
   <!-- Projets -->
   <section id="projects">
     <h2>Mes Projets</h2>
-    <ul class="project-grid" id="project-grid"></ul>
+    <ul class="project-grid" id="project-grid" aria-live="polite" aria-label="Liste des projets"></ul>
   </section>
 
   <!-- Contact -->
@@ -98,7 +100,7 @@
 
   <!-- Footer -->
   <footer>
-    <nav class="footer__links">
+    <nav class="footer__links" aria-label="Liens sociaux">
       <a href="https://github.com/Faraf-Y" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="#">LinkedIn</a>
       <a href="https://faraf-y.github.io/mon-portfolio" target="_blank" rel="noopener noreferrer">Site</a>
